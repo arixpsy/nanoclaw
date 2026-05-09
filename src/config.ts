@@ -1,3 +1,4 @@
+import fs from 'fs';
 import os from 'os';
 import path from 'path';
 
@@ -22,6 +23,19 @@ export const SENDER_ALLOWLIST_PATH = path.join(HOME_DIR, '.config', 'nanoclaw', 
 export const STORE_DIR = path.resolve(PROJECT_ROOT, 'store');
 export const GROUPS_DIR = path.resolve(PROJECT_ROOT, 'groups');
 export const DATA_DIR = path.resolve(PROJECT_ROOT, 'data');
+
+// Unix sockets can't be created on NTFS (WSL mounts Windows drives as /mnt/c/...).
+// On Linux, redirect sockets to /tmp so they always land on a native filesystem.
+function resolveSockDir(): string {
+  if (process.platform === 'linux') {
+    const slug = getInstallSlug(PROJECT_ROOT) || path.basename(PROJECT_ROOT);
+    const dir = path.join(os.tmpdir(), `nanoclaw-${slug}`);
+    fs.mkdirSync(dir, { recursive: true });
+    return dir;
+  }
+  return DATA_DIR;
+}
+export const SOCK_DIR = resolveSockDir();
 
 // Per-checkout image tag so two installs on the same host don't share
 // `nanoclaw-agent:latest` and clobber each other on rebuild.

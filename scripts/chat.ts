@@ -13,13 +13,13 @@
 import net from 'net';
 import path from 'path';
 
-import { DATA_DIR } from '../src/config.js';
+import { SOCK_DIR } from '../src/config.js';
 
 const SILENCE_MS = 2000; // exit after this much quiet time following the first reply
 const TOTAL_TIMEOUT_MS = 120_000; // hard stop
 
 function socketPath(): string {
-  return path.join(DATA_DIR, 'cli.sock');
+  return path.join(SOCK_DIR, 'cli.sock');
 }
 
 function main(): void {

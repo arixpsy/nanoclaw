@@ -8,11 +8,11 @@
 import net from 'net';
 import path from 'path';
 
-import { DATA_DIR } from '../config.js';
+import { SOCK_DIR } from '../config.js';
 import type { RequestFrame, ResponseFrame } from './frame.js';
 import type { Transport } from './transport.js';
 
-export const DEFAULT_SOCKET_PATH = path.join(DATA_DIR, 'ncl.sock');
+export const DEFAULT_SOCKET_PATH = path.join(SOCK_DIR, 'ncl.sock');
 
 export class SocketTransport implements Transport {
   constructor(private readonly socketPath: string = DEFAULT_SOCKET_PATH) {}
